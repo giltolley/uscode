@@ -4,7 +4,7 @@
 A trivial utility to retrieve the US Code
 """
 
-import httplib
+import http.client
 import os
 import re
 import sys
@@ -41,7 +41,7 @@ def extract_title(conn, title_name, code_dir):
     for entry in zip_obj.infolist():
         # Extract entry content into destination file
         out_path = get_out_path(code_dir, entry.filename)
-        print "Processing", entry.filename, "to", out_path
+        print("Processing {} to {}".format(entry.filename, out_path))
         out_file = open(out_path, "wt+")
         out_file.write(zip_obj.read(entry.filename))
         out_file.close()
@@ -80,7 +80,7 @@ def extract_titles(dest_dir):
     """
     title_list = [ "%02d" % i for i in range(1, 51) if i != 34 ]
 
-    conn = httplib.HTTPConnection('uscode.house.gov')
+    conn = http.client.HTTPConnection('uscode.house.gov')
     dest_dir = os.path.join(dest_dir, 'code')
     extract_title(conn, "organiclaws", dest_dir)
     for title in title_list:
@@ -90,8 +90,8 @@ def extract_titles(dest_dir):
 if __name__ == "__main__":
     
     if len(sys.argv) != 2:
-        print "Usage: retrive_code <dest_path>"
-	sys.exit(1)
+        print("Usage: retrive_code <dest_path>")
+        sys.exit(1)
 
     extract_titles(sys.argv[1])
         
